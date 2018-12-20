@@ -92,10 +92,10 @@ RUN     python -m sos_notebook.install
 RUN     pip install jupyterlab
 RUN     jupyter labextension install jupyterlab-sos
 
-COPY    examples /home/jovyan/examples
+# COPY    examples /home/jovyan/examples
 
 USER    root
-RUN     chown -R jovyan /home/jovyan/examples
+# RUN     chown -R jovyan /home/jovyan/examples
 RUN     chown -R jovyan /home/jovyan/work
 RUN     chown -R jovyan /home/jovyan/.local
 
