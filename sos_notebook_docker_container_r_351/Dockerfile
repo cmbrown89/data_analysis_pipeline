@@ -1,92 +1,106 @@
-# Testing R 3.5.1 
-# Copyright (c) Jupyter Development Team.
-# Distributed under the terms of the Modified BSD License.
-ARG BASE_CONTAINER=jupyter/scipy-notebook
-FROM $BASE_CONTAINER
+# Copyright (c) Bo Peng and the University of Texas MD Anderson Cancer Center
+# Distributed under the terms of the 3-clause BSD License.
 
-LABEL maintainer="Clairessa M. Brown <clairessabrown@email.arizona.edu> and Blake Joyce <bjoyce3@email.arizona.edu>"
-
-# Set when building on Travis so that certain long-running build steps can
-# be skipped to shorten build time.
-ARG TEST_ONLY_BUILD
-
-USER root
-
-# R pre-requisites
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    fonts-dejavu \
-    tzdata \
-    gfortran \
-    gcc && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Julia dependencies
-# install Julia packages in /opt/julia instead of $HOME
-ENV JULIA_DEPOT_PATH=/opt/julia
-ENV JULIA_PKGDIR=/opt/julia
-ENV JULIA_VERSION=1.0.0
-
-RUN mkdir /opt/julia-${JULIA_VERSION} && \
-    cd /tmp && \
-    wget -q https://julialang-s3.julialang.org/bin/linux/x64/`echo ${JULIA_VERSION} | cut -d. -f 1,2`/julia-${JULIA_VERSION}-linux-x86_64.tar.gz && \
-    echo "bea4570d7358016d8ed29d2c15787dbefaea3e746c570763e7ad6040f17831f3 *julia-${JULIA_VERSION}-linux-x86_64.tar.gz" | sha256sum -c - && \
-    tar xzf julia-${JULIA_VERSION}-linux-x86_64.tar.gz -C /opt/julia-${JULIA_VERSION} --strip-components=1 && \
-    rm /tmp/julia-${JULIA_VERSION}-linux-x86_64.tar.gz
-RUN ln -fs /opt/julia-*/bin/julia /usr/local/bin/julia
-
-# Show Julia where conda libraries are \
-RUN mkdir /etc/julia && \
-    echo "push!(Libdl.DL_LOAD_PATH, \"$CONDA_DIR/lib\")" >> /etc/julia/juliarc.jl && \
-    # Create JULIA_PKGDIR \
-    mkdir $JULIA_PKGDIR && \
-    chown $NB_USER $JULIA_PKGDIR && \
-    fix-permissions $JULIA_PKGDIR
-
-USER $NB_UID
-
-# R packages including IRKernel which gets installed globally.
-RUN conda install --quiet --yes \
-    'rpy2=2.9.4' \
-    'r-base=3.5.1' \
-    'r-irkernel=0.8.14' \
-    'r-plyr=1.8.4' \
-    'r-devtools=2.0.1' \
-    'r-tidyverse=1.2.1' \
-    'r-shiny=1.2.0' \
-    'r-rmarkdown=1.10' \
-    'r-forecast=8.4' \
-    'r-rsqlite=2.1.1' \
-    'r-reshape2=1.4.3' \
-    'r-nycflights13=1.0.0' \
-    'r-caret=6.0_80' \
-    'r-rcurl=1.95-4.11' \
-    'r-crayon=1.3.4' \
-    'r-randomforest=4.6-14' \
-    'r-htmltools=0.3.6' \
-    'r-sparklyr=0.9.3' \
-    'r-htmlwidgets=1.2' \
-    'r-hexbin=1.27.2' && \
-    conda clean -tipsy && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-
-# Add Julia packages. Only add HDF5 if this is not a test-only build since
-# it takes roughly half the entire build time of all of the images on Travis
-# to add this one package and often causes Travis to timeout.
+# SoS official docker image for latest version of SoS. Use command
+# 
+#     docker build -t mdabioinfo/sos-notebook:latest docker-notebook
 #
-# Install IJulia as jovyan and then move the kernelspec out
-# to the system share location. Avoids problems with runtime UID change not
-# taking effect properly on the .local folder in the jovyan home dir.
-RUN julia -e 'import Pkg; Pkg.update()' && \
-    (test $TEST_ONLY_BUILD || julia -e 'import Pkg; Pkg.add("HDF5")') && \
-    julia -e 'import Pkg; Pkg.add("Gadfly")' && \
-    julia -e 'import Pkg; Pkg.add("RDatasets")' && \
-    julia -e 'import Pkg; Pkg.add("IJulia")' && \
-    # Precompile Julia packages \
-    julia -e 'using IJulia' && \
-    # move kernelspec out of home \
-    mv $HOME/.local/share/jupyter/kernels/julia* $CONDA_DIR/share/jupyter/kernels/ && \
-    chmod -R go+rx $CONDA_DIR/share/jupyter && \
-    rm -rf $HOME/.local && \
-    fix-permissions $JULIA_PKGDIR $CONDA_DIR/share/jupyter
+# to build it.
+#
+#FROM jupyter/datascience-notebook:1085ca054a5f
+
+FROM data_sci_r351:latest
+
+MAINTAINER Bo Peng <bpeng@mdanderson.org>
+
+USER    root
+
+#       Tools
+RUN     apt-get update
+RUN     apt-get install -y graphviz
+RUN     apt-get install -y texlive-xetex texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+
+RUN     apt-get install -y octave
+#RUN     octave --eval 'pkg install -forge dataframe'
+
+RUN     apt-get purge --auto-remove nodejs npm node
+RUN     rm -rf ~/.nvm 
+RUN     apt-get install -y nodejs-legacy npm
+
+RUN     apt-get install -y libgmp3-dev
+RUN     apt-get install -y software-properties-common
+RUN     add-apt-repository -y ppa:staticfloat/juliareleases
+#RUN     add-apt-repository -y ppa:staticfloat/julia-deps
+RUN     apt-get update
+RUN     apt-get install -y julia
+
+# Install some packages for our examples
+#RUN     R --slave -e 'install.packages(c("package1", "package2"), lib="/usr/local/lib/R/site-library")'
+RUN     R --slave -e 'source("https://bioconductor.org/biocLite.R"); biocLite("biomaRt")'
+RUN     R --slave -e 'install.packages("glmnet", repos="http://cran.us.r-project.org")'
+RUN     pip install sklearn
+
+USER    jovyan
+
+#       Bash
+RUN     pip install bash_kernel
+RUN     python -m bash_kernel.install --user
+
+#       Octave
+RUN     pip install octave_kernel
+RUN     python -m octave_kernel install --user
+
+#       JavaScript
+RUN     npm rebuild
+RUN     npm install -g ijavascript
+RUN     ijsinstall --spec-path=full
+
+#       SPARQL kernel for testing
+RUN     cd /tmp && git clone https://github.com/asanchez75/sparql-kernel.git && cd /tmp/sparql-kernel && python setup.py install
+RUN     jupyter sparqlkernel install --user
+
+#        Julia
+RUN     julia -e "ENV[\"JUPYTER\"]=\"$(which jupyter)\";Pkg.add(\"IJulia\")"
+RUN     julia -e 'Pkg.add("Feather")'
+RUN     julia -e 'Pkg.add("DataFrames")'
+RUN     julia -e 'Pkg.add("NamedArrays")'
+
+#       Python 2
+RUN     conda create -n ipykernel_py2 python=2 ipykernel
+RUN     /bin/bash -c "source activate ipykernel_py2; python -m ipykernel install --user; source deactivate"
+
+#       Markdown kernel
+RUN     pip install markdown-kernel
+RUN     python -m markdown_kernel.install
+
+# Bioinfo
+RUN     pip install pysam
+
+# for testing
+RUN     pip install xlsx2csv bs4
+
+# SOS
+RUN     pip install pip --upgrade
+RUN     pip install xlrd docker
+RUN     pip install markdown wand graphviz imageio pillow 
+
+
+RUN     conda install -y feather-format -c conda-forge
+RUN     pip install nbformat --upgrade
+## trigger rerun for sos updates
+ARG	    DUMMY=unknown
+RUN     DUMMY=${DUMMY} pip install sos sos-notebook sos-r sos-julia sos-python sos-matlab sos-javascript sos-bash sos-bioinfo --upgrade
+RUN     python -m sos_notebook.install
+RUN     pip install jupyterlab
+RUN     jupyter labextension install jupyterlab-sos
+
+# COPY    examples /home/jovyan/examples
+
+USER    root
+# RUN     chown -R jovyan /home/jovyan/examples
+RUN     chown -R jovyan /home/jovyan/work
+RUN     chown -R jovyan /home/jovyan/.local
+
+USER    jovyan
+
+#EXPOSE	8888
