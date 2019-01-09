@@ -47,26 +47,26 @@ USER $NB_UID
 
 # R packages including IRKernel which gets installed globally.
 RUN conda install --quiet --yes \
-    'rpy2=2.9*' \
+    'rpy2=2.9.4' \
     'r-base=3.5.1' \
-    'r-irkernel=0.8*' \
-    'r-plyr=1.8*' \
-    'r-devtools=1*' \
-    'r-tidyverse=1.2*' \
-    'r-shiny=1.2*' \
-    'r-rmarkdown=1*' \
-    'r-forecast=8*' \
-    'r-rsqlite=2*' \
-    'r-reshape2=1.4*' \
-#    'r-nycflights13=0.2*' \
-    'r-caret=6.0*' \
-    'r-rcurl=1.95*' \
-    'r-crayon=1.3*' \
-    'r-randomforest=4.6*' \
-    'r-htmltools=0.3*' \
-    'r-sparklyr=0.9*' \
-    'r-htmlwidgets=1*' \
-    'r-hexbin=1.27*' && \
+    'r-irkernel=0.8.14' \
+    'r-plyr=1.8.4' \
+    'r-devtools=2.0.1' \
+    'r-tidyverse=1.2.1' \
+    'r-shiny=1.2.0' \
+    'r-rmarkdown=1.10' \
+    'r-forecast=8.4' \
+    'r-rsqlite=2.1.1' \
+    'r-reshape2=1.4.3' \
+    'r-nycflights13=1.0.0' \
+    'r-caret=6.0_80' \
+    'r-rcurl=1.95-4.11' \
+    'r-crayon=1.3.4' \
+    'r-randomforest=4.6-14' \
+    'r-htmltools=0.3.6' \
+    'r-sparklyr=0.9.3' \
+    'r-htmlwidgets=1.2' \
+    'r-hexbin=1.27.2' && \
     conda clean -tipsy && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
