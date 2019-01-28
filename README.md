@@ -7,7 +7,7 @@ The SOS notebook container was built on top of the [jupyter/datascience-notebook
 # Running the "original SOS notebook"
 The "original" SOS notebook container was built with dockerfiles contained in folders data_sci_notebook_docker_container_r_341 and sos_notebook_docker_container_r_341. 
 
-# Running the sos notebooik with R v. 3.5.1
+# Running the sos notebook with R v. 3.5.1
 To access the SOS notebook container using R v. 3.5.1, you can use sos_notebook_docker_container_r_351 and data_sci_notebook_docker_container_r_351.
 
 
