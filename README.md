@@ -13,7 +13,7 @@ To access the SOS notebook container using R v. 3.5.1, you can use [sos_notebook
 
 To get these docker containers to currently run, you'll need to [set up](https://vatlab.github.io/sos-docs/running.html#SoS-Notebook) the SOS notebook via docker and follow the run directions.
 
-The commands I use to run these containers is the following:<br>
+The commands I use to run these containers are the following:<br>
 ```
 docker run -dp 8888:8888 -v $PWD/data_analysis_pipeline:/home/jovyan/dada2_pipeline sos_r351:latest
 
@@ -92,7 +92,7 @@ After these edits, I was able to successfully build the docker container running
 ## How I generated the SOS notebook running R v. 3.5.1
 
 <br><br><br>
-#To do:
+# To do:
 - [x] Finish describing SOS R v. 3.4.1 install/build
 - [ ] Finish describing SOS R v. 3.5.1 install/build 
 - [ ] Get binder running
