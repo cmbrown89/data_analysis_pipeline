@@ -1,5 +1,5 @@
 # Information about this repository
-This repository contains 4 folders that hold dockerfiles and [sos jupyter notebooks](https://vatlab.github.io/sos-docs/) for a data analysis pipeline for 16S rRNA amplicon data. These notebooks run in docker containers. 
+This repository contains 4 folders that hold dockerfiles and [sos jupyter notebooks](https://vatlab.github.io/sos-docs/) for a data analysis pipeline for 16S rRNA amplicon data. I'm using the SOS notebook because I want to build this with both python and R. I'm using docker to run these notebooks since I was advised that the local install of the SOS notebook was overly complicated. 
 
 The SOS notebook container was built on top of the [jupyter/datascience-notebook](https://github.com/jupyter/docker-stacks/tree/master/datascience-notebook). The jupyter/datascience-notebook image the original SOS notebook used called R v. 3.4.1. Since the data analysis software will require R v. 3.5.1, I needed to change the R version in the jupyter/datascience-notebook image from R v. 3.4.1 to R v. 3.5.1. Read on for more details.
 <br>
