@@ -8,7 +8,7 @@ The SOS notebook container image was built on top of the [jupyter/datascience-no
 ## Running the "original SOS notebook" with R v. 3.4.1
 The "original" SOS notebook container was built with dockerfiles contained in folders [data_sci_notebook_docker_container_r_341](/data_sci_notebook_docker_container_r_341) and [sos_notebook_docker_container_r_341](/sos_notebook_docker_container_r_341). 
 
-To get these docker containers to currently run, you'll need to [set up](https://vatlab.github.io/sos-docs/running.html#SoS-Notebook) the SOS notebook via docker and follow the run directions.
+To get these docker containers to run on your local computer, you'll need to install [docker](https://www.docker.com/get-started) on your local machine, [set up](https://vatlab.github.io/sos-docs/running.html#SoS-Notebook) the SOS notebook via docker and follow the run directions.
 
 You can run this with the following commands:
 ```
@@ -28,7 +28,7 @@ docker logs <container name from ps command>
 ## Running the SOS jupyter notebook with R v. 3.5.1
 To access the SOS notebook container using R v. 3.5.1, you can use [sos_notebook_docker_container_r_351](/sos_notebook_docker_container_r_351) and [data_sci_notebook_docker_container_r_351](/data_sci_notebook_docker_container_r_351).
 
-To get these docker containers to currently run, you'll need to [set up](https://vatlab.github.io/sos-docs/running.html#SoS-Notebook) the SOS notebook via docker and follow the run directions.
+To get these docker containers to run on your local computer, you'll need to install [docker](https://www.docker.com/get-started) on your local machine, [set up](https://vatlab.github.io/sos-docs/running.html#SoS-Notebook) the SOS notebook via docker and follow the run directions.
 
 You can run this with the following commands:
 ```
