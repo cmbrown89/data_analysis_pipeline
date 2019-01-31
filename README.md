@@ -15,10 +15,10 @@ To get these docker containers to currently run, you'll need to [set up](https:/
 
 After installing docker on your computer, you can build these containers with the following commands. 
 ```
-# First build data science container
+# First build data science container with folder that holds the appropriate Dockerfile
 docker build $PWD/data_sci_notebook_docker_container_r_351/ -t data_sci_r351
 
-# Then build the sos container 
+# Then build the sos container with folder that holds the appropriate Dockerfile
 docker build $PWD/sos_notebook_docker_container_r_351/ -t sos_r351
 ```
 
