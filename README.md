@@ -27,16 +27,16 @@ I then tried to build the SOS notebook docker image but I got errors during the 
 
 ```diff
 10c10
-+ FROM data_sci_r341:latest (lines I need to talk about)
----
++ FROM data_sci_r341:latest (my edits)
+---<br> 
 - FROM jupyter/datascience-notebook:1085ca054a5f (original)
 24c24
 + #RUN     apt-get purge --auto-remove nodejs npm node
----
+---<br> 
 - RUN     apt-get purge --auto-remove nodejs npm node
 26c26
 + RUN     apt-get install -y nodejs npm
----
+---<br> 
 - RUN     apt-get install -y nodejs-legacy npm
 30c30
 + #RUN     add-apt-repository -y ppa:staticfloat/juliareleases
