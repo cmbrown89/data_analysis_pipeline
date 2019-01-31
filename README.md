@@ -46,6 +46,7 @@ docker logs <container name from ps command>
 ```
 <br>
 <br>
+
 # Build information
 ## How I generated the "original SOS notebook"
 The [dockerfile](https://github.com/vatlab/SoS/tree/master/development/docker-notebook) for the SOS jupyter notebook run in a docker image pulls upstream from the [jupyter/datascience-notebook docker container](https://hub.docker.com/r/jupyter/datascience-notebook/) image 1085ca054a5f from May 12, 2018. 
