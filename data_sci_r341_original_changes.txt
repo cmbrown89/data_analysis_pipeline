@@ -1,0 +1,42 @@
+# diff --suppress-common-lines sos_original_docker/Dockerfile original_unedited_sos_dockerfile - data_sci_r341_original_changes.txt
+
+```diff
+10c10
++ FROM data_sci_r341:latest (lines I need to talk about)
+---
+- FROM jupyter/datascience-notebook:1085ca054a5f (original)
+24c24
++ #RUN     apt-get purge --auto-remove nodejs npm node
+---
+- RUN     apt-get purge --auto-remove nodejs npm node
+26c26
++ RUN     apt-get install -y nodejs npm
+---
+- RUN     apt-get install -y nodejs-legacy npm
+30c30
++ #RUN     add-apt-repository -y ppa:staticfloat/juliareleases
+---
+- RUN     add-apt-repository -y ppa:staticfloat/juliareleases
+33c33
++ #RUN     apt-get install -y julia
+---
+- RUN     apt-get install -y julia
+61,64c61,64
++ #RUN     julia -e "ENV[\"JUPYTER\"]=\"$(which jupyter)\";Pkg.add(\"IJulia\")"
++ #RUN     julia -e 'Pkg.add("Feather")'
++ #RUN     julia -e 'Pkg.add("DataFrames")'
++ #RUN     julia -e 'Pkg.add("NamedArrays")'
+---
+- RUN     julia -e "ENV[\"JUPYTER\"]=\"$(which jupyter)\";Pkg.add(\"IJulia\")"
+- RUN     julia -e 'Pkg.add("Feather")'
+- RUN     julia -e 'Pkg.add("DataFrames")'
+- RUN     julia -e 'Pkg.add("NamedArrays")'
+95c95
++ # COPY    examples /home/jovyan/examples
+---
+- COPY    examples /home/jovyan/examples
+98c98
++ # RUN     chown -R jovyan /home/jovyan/examples
+---
+- RUN     chown -R jovyan /home/jovyan/examples
+```
