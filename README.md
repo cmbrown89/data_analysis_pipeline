@@ -25,15 +25,16 @@ I first built the datascience docker container (image 1085ca054a5f) with no code
 
 I then tried to build the SOS notebook docker image but I got errors during the installs. The changes I made are described below where the "<" signifies the changes I made, and the ">" signifies the original SOS dockerfile code. The line numbers for each file are listed in *number*c*number* format.
 
-10c10 (I changed line 10)
+10c10 (I changed line 10)<br>
 < FROM data_sci_r341:latest (my changes)
-<br><br>
----
-> FROM jupyter/datascience-notebook:1085ca054a5f (original dockerfile)
-24c24
-< #RUN     apt-get purge --auto-remove nodejs npm node
----
-> RUN     apt-get purge --auto-remove nodejs npm node
+<br>
+---<br>
+> FROM jupyter/datascience-notebook:1085ca054a5f (original dockerfile)<br><br>
+
+24c24<br>
+< #RUN     apt-get purge --auto-remove nodejs npm node<br>
+---<br>
+> RUN     apt-get purge --auto-remove nodejs npm node<br><br>
 
 26c26
 < RUN     apt-get install -y nodejs npm
