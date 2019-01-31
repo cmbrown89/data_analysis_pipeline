@@ -219,6 +219,6 @@ docker logs <container name from ps command>
 - [ ] Get binder running
 - [ ] Get pipeline code in SOS notebook 
 - [ ] Make pipeline modular, ect.
-- [ ] Start testing with data
+- [ ] Start testing with data 😜
 
 
