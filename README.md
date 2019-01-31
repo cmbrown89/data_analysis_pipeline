@@ -1,7 +1,7 @@
 # Information about this repository
 This repository contains 4 folders that hold dockerfiles and [sos jupyter notebooks](https://vatlab.github.io/sos-docs/) for a data analysis pipeline for 16S rRNA amplicon data. These notebooks run in docker containers. 
 
-The SOS notebook container was built on top of the [jupyter/datascience-notebook](https://github.com/jupyter/docker-stacks/tree/master/datascience-notebook). The jupyter/datascience-notebook uses R v. 3.4.1 although the data analysis software used will require R v. 3.5.1. So, I needed to change the R version in the jupyter/datascience-notebook from R v. 3.4.1 to R v. 3.5.1. Read on for more details.
+The SOS notebook container was built on top of the [jupyter/datascience-notebook](https://github.com/jupyter/docker-stacks/tree/master/datascience-notebook). The jupyter/datascience-notebook image the original SOS notebook used called R v. 3.4.1. Since the data analysis software will require R v. 3.5.1, I needed to change the R version in the jupyter/datascience-notebook image from R v. 3.4.1 to R v. 3.5.1. Read on for more details.
 <br>
 <br>
 # Running the SOS jupyter notebooks
@@ -13,24 +13,6 @@ To access the SOS notebook container using R v. 3.5.1, you can use [sos_notebook
 
 To get these docker containers to currently run, you'll need to [set up](https://vatlab.github.io/sos-docs/running.html#SoS-Notebook) the SOS notebook via docker and follow the run directions.
 
-After installing docker on your computer, you can build these containers with the following commands. 
-```
-# First build data science container with folder that holds the appropriate Dockerfile
-docker build $PWD/data_sci_notebook_docker_container_r_351/ -t data_sci_r351
-
-# Then build the sos container with folder that holds the appropriate Dockerfile
-docker build $PWD/sos_notebook_docker_container_r_351/ -t sos_r351
-```
-
-The commands I use to run these containers are the following:<br>
-```
-docker run -dp 8888:8888 -v $PWD/data_analysis_pipeline:/home/jovyan/dada2_pipeline sos_r351:latest
-
-docker ps
-
-docker logs <container name from ps command>
-```
-
 Future plans include using binder to run these notebooks through github.
 <br>
 <br>
@@ -41,15 +23,13 @@ The [dockerfile](https://github.com/vatlab/SoS/tree/master/development/docker-no
 I first built the datascience docker container (image 1085ca054a5f) with no code changes with the following command:
 `docker data_sci_notebook_docker_container_r_341/ build -t data_sci_r341`
 
-I then tried to build the SOS notebook docker image but I got errors during the installs. The changes I made are described below where the "<" signifies the changes I made, and the ">" signifies the original SOS dockerfile code. You can read these changes in a below.
-
-The line numbers for each file are listed in *number* c *number* format. The `---` divides my edits above from the original file below.
+I then tried to build the SOS notebook docker image but I got errors during the installs. You can read these changes in a below. The line numbers for each file are listed in *number* c *number* format. The `---` divides my edits above from the original file below.
 
 ```diff
 10c10
-+ FROM data_sci_r341:latest (my edits)
++ FROM data_sci_r341:latest 
 ---
-- FROM jupyter/datascience-notebook:1085ca054a5f (original)
+- FROM jupyter/datascience-notebook:1085ca054a5f 
 
 24c24
 + #RUN     apt-get purge --auto-remove nodejs npm node
@@ -93,17 +73,118 @@ The line numbers for each file are listed in *number* c *number* format. The `--
 - RUN     chown -R jovyan /home/jovyan/examples
 ```
 
-After these edits, I was able to successfully build the docker container running the SOS jupyter notebook (R v. 3.4.1) with the following command:
+After these edits, I was able to successfully build the docker container running the SOS jupyter notebook (R v. 3.4.1) with the following commands:
 
-`docker data_sci_notebook_docker_container_r_341/ build -t data_sci_r341`
+```
+# First build data science container with folder that holds the appropriate Dockerfile
+docker build $PWD/data_sci_notebook_docker_container_r_341/ -t data_sci_r341
 
+# Then build the sos container with folder that holds the appropriate Dockerfile
+docker build $PWD/sos_notebook_docker_container_r_341/ -t sos_r341
+```
+
+The commands I use to run these containers are the following:<br>
+```
+docker run -dp 8888:8888 -v $PWD/data_analysis_pipeline:/home/jovyan/dada2_pipeline sos_r341:latest
+
+docker ps
+
+docker logs <container name from ps command>
+```
 
 ## How I generated the SOS notebook running R v. 3.5.1
+When I changed the [dockerfile](/data_sci_notebook_docker_container_r_351/) from the jupyter/datascience-notebook calling for [R v. 3.4.1](/data_sci_notebook_docker_container_r_341/), there were several dependency conflicts that arose. To fix this, I specified the latest R package versions. 
+
+```diff
+49,68c50,69
+-     'rpy2=2.8*' \
+-     'r-base=3.4.1' \
+-     'r-irkernel=0.8*' \
+-     'r-plyr=1.8*' \
+-     'r-devtools=1.13*' \
+-     'r-tidyverse=1.1*' \
+-     'r-shiny=1.0*' \
+-     'r-rmarkdown=1.8*' \
+-     'r-forecast=8.2*' \
+-     'r-rsqlite=2.0*' \
+-     'r-reshape2=1.4*' \
+-     'r-nycflights13=0.2*' \
+-     'r-caret=6.0*' \
+-     'r-rcurl=1.95*' \
+-     'r-crayon=1.3*' \
+-     'r-randomforest=4.6*' \
+-     'r-htmltools=0.3*' \
+-     'r-sparklyr=0.7*' \
+-     'r-htmlwidgets=1.0*' \
+-     'r-hexbin=1.27*' && \
+---
++     'rpy2=2.9.4' \
++     'r-base=3.5.1' \
++     'r-irkernel=0.8.14' \
++     'r-plyr=1.8.4' \
++     'r-devtools=2.0.1' \
++     'r-tidyverse=1.2.1' \
++     'r-shiny=1.2.0' \
++     'r-rmarkdown=1.10' \
++     'r-forecast=8.4' \
++     'r-rsqlite=2.1.1' \
++     'r-reshape2=1.4.3' \
++     'r-nycflights13=1.0.0' \
++     'r-caret=6.0_80' \
++     'r-rcurl=1.95-4.11' \
++     'r-crayon=1.3.4' \
++     'r-randomforest=4.6-14' \
++     'r-htmltools=0.3.6' \
++     'r-sparklyr=0.9.3' \
++     'r-htmlwidgets=1.2' \
++     'r-hexbin=1.27.2' && \
+```
+
+After these changes, I was able to build a datascience-notebook image calling for R v. 3.5.1 et., al. Next, I changed a few things to get the SOS notebook docker image running.
+
+```diff
+10c10,12
+- FROM jupyter/datascience-notebook:1085ca054a5f
+---
++ #FROM jupyter/datascience-notebook:1085ca054a5f
++ 
++ FROM data_sci_r351:latest
+
+95c97
+- COPY    examples /home/jovyan/examples
+---
++ # COPY    examples /home/jovyan/examples
+
+98c100
+- RUN     chown -R jovyan /home/jovyan/examples
+---
++ # RUN     chown -R jovyan /home/jovyan/examples
+```
+
+
+After installing docker on your computer, you can build these containers with the following commands. 
+```
+# First build data science container with folder that holds the appropriate Dockerfile
+docker build $PWD/data_sci_notebook_docker_container_r_351/ -t data_sci_r351
+
+# Then build the sos container with folder that holds the appropriate Dockerfile
+docker build $PWD/sos_notebook_docker_container_r_351/ -t sos_r351
+```
+
+The commands I use to run these containers are the following:<br>
+```
+docker run -dp 8888:8888 -v $PWD/data_analysis_pipeline:/home/jovyan/dada2_pipeline sos_r351:latest
+
+docker ps
+
+docker logs <container name from ps command>
+```
+
 
 <br><br><br>
 ### To do:
 - [x] Finish describing SOS R v. 3.4.1 install/build
-- [ ] Finish describing SOS R v. 3.5.1 install/build 
+- [x] Finish describing SOS R v. 3.5.1 install/build 
 - [ ] Get binder running
 - [ ] Get pipeline code in SOS notebook 
 - [ ] Make pipeline modular, ect.
