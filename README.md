@@ -92,7 +92,7 @@ After these edits, I was able to successfully build the docker container running
 ## How I generated the SOS notebook running R v. 3.5.1
 
 <br><br><br>
-# To do:
+### To do:
 - [x] Finish describing SOS R v. 3.4.1 install/build
 - [ ] Finish describing SOS R v. 3.5.1 install/build 
 - [ ] Get binder running
