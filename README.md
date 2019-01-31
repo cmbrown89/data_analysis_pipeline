@@ -23,7 +23,9 @@ The [dockerfile](https://github.com/vatlab/SoS/tree/master/development/docker-no
 I first built the datascience docker container (image 1085ca054a5f) with no code changes with the following command:
 `docker data_sci_notebook_docker_container_r_341/ build -t data_sci_r341`
 
-I then tried to build the SOS notebook docker image but I got errors during the installs. The changes I made are described below where the "<" signifies the changes I made, and the ">" signifies the original SOS dockerfile code. The line numbers for each file are listed in *number*c*number* format. You can read these changes in a file I'll upload soon.
+I then tried to build the SOS notebook docker image but I got errors during the installs. The changes I made are described below where the "<" signifies the changes I made, and the ">" signifies the original SOS dockerfile code. You can read these changes in a below.
+
+The line numbers for each file are listed in *number* c *number* format. The `---` divides my edits above from the original file below.
 
 ```diff
 10c10
@@ -35,18 +37,22 @@ I then tried to build the SOS notebook docker image but I got errors during the 
 + #RUN     apt-get purge --auto-remove nodejs npm node
 ---
 - RUN     apt-get purge --auto-remove nodejs npm node
+
 26c26
 + RUN     apt-get install -y nodejs npm
 ---
 - RUN     apt-get install -y nodejs-legacy npm
+
 30c30
 + #RUN     add-apt-repository -y ppa:staticfloat/juliareleases
 ---
 - RUN     add-apt-repository -y ppa:staticfloat/juliareleases
+
 33c33
 + #RUN     apt-get install -y julia
 ---
 - RUN     apt-get install -y julia
+
 61,64c61,64
 + #RUN     julia -e "ENV[\"JUPYTER\"]=\"$(which jupyter)\";Pkg.add(\"IJulia\")"
 + #RUN     julia -e 'Pkg.add("Feather")'
@@ -57,10 +63,12 @@ I then tried to build the SOS notebook docker image but I got errors during the 
 - RUN     julia -e 'Pkg.add("Feather")'
 - RUN     julia -e 'Pkg.add("DataFrames")'
 - RUN     julia -e 'Pkg.add("NamedArrays")'
+
 95c95
 + # COPY    examples /home/jovyan/examples
 ---
 - COPY    examples /home/jovyan/examples
+
 98c98
 + # RUN     chown -R jovyan /home/jovyan/examples
 ---
