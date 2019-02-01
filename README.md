@@ -216,6 +216,7 @@ docker logs <container name from ps command>
 ### To do:
 - [x] Finish describing SOS R v. 3.4.1 install/build
 - [x] Finish describing SOS R v. 3.5.1 install/build 
+- [ ] Add data analysis packages to R v. 3.5.1 datascience dockerfile (vegan, BiocManager, tidyverse, dada2) 
 - [ ] Get pipeline code in SOS notebook  
 - [ ] Get binder running
 - [ ] Make pipeline modular, ect.
