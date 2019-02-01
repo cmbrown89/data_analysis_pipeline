@@ -216,8 +216,8 @@ docker logs <container name from ps command>
 ### To do:
 - [x] Finish describing SOS R v. 3.4.1 install/build
 - [x] Finish describing SOS R v. 3.5.1 install/build 
+- [ ] Get pipeline code in SOS notebook  
 - [ ] Get binder running
-- [ ] Get pipeline code in SOS notebook 
 - [ ] Make pipeline modular, ect.
 - [ ] Start testing with data 😜
 
