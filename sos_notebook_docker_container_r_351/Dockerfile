@@ -7,9 +7,7 @@
 #
 # to build it.
 #
-#FROM jupyter/datascience-notebook:1085ca054a5f
-
-FROM data_sci_r351:latest
+FROM data_sci_r341:latest
 
 MAINTAINER Bo Peng <bpeng@mdanderson.org>
 
@@ -23,16 +21,16 @@ RUN     apt-get install -y texlive-xetex texlive-latex-recommended texlive-latex
 RUN     apt-get install -y octave
 #RUN     octave --eval 'pkg install -forge dataframe'
 
-RUN     apt-get purge --auto-remove nodejs npm node
-RUN     rm -rf ~/.nvm 
-RUN     apt-get install -y nodejs-legacy npm
+#RUN     apt-get purge --auto-remove nodejs npm node
+RUN     rm -rf ~/.nvm
+RUN     apt-get install -y nodejs npm
 
 RUN     apt-get install -y libgmp3-dev
 RUN     apt-get install -y software-properties-common
-RUN     add-apt-repository -y ppa:staticfloat/juliareleases
+#RUN     add-apt-repository -y ppa:staticfloat/juliareleases
 #RUN     add-apt-repository -y ppa:staticfloat/julia-deps
 RUN     apt-get update
-RUN     apt-get install -y julia
+#RUN     apt-get install -y julia
 
 # Install some packages for our examples
 #RUN     R --slave -e 'install.packages(c("package1", "package2"), lib="/usr/local/lib/R/site-library")'
@@ -60,10 +58,10 @@ RUN     cd /tmp && git clone https://github.com/asanchez75/sparql-kernel.git && 
 RUN     jupyter sparqlkernel install --user
 
 #        Julia
-RUN     julia -e "ENV[\"JUPYTER\"]=\"$(which jupyter)\";Pkg.add(\"IJulia\")"
-RUN     julia -e 'Pkg.add("Feather")'
-RUN     julia -e 'Pkg.add("DataFrames")'
-RUN     julia -e 'Pkg.add("NamedArrays")'
+#RUN     julia -e "ENV[\"JUPYTER\"]=\"$(which jupyter)\";Pkg.add(\"IJulia\")"
+#RUN     julia -e 'Pkg.add("Feather")'
+#RUN     julia -e 'Pkg.add("DataFrames")'
+#RUN     julia -e 'Pkg.add("NamedArrays")'
 
 #       Python 2
 RUN     conda create -n ipykernel_py2 python=2 ipykernel
