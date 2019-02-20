@@ -216,7 +216,7 @@ docker logs <container name from ps command>
 ### To do:
 - [x] Finish describing SOS R v. 3.4.1 install/build
 - [x] Finish describing SOS R v. 3.5.1 install/build 
-- [x] Add data analysis packages to R v. 3.5.1 datascience dockerfile (vegan, BiocManager, tidyverse, dada2) 
+- [x] Add data analysis packages to R v. 3.5.1 dockerfile (vegan, BiocManager, tidyverse, dada2) 
 - [ ] Upload Dockerfile with SOS and bioinformatic R packages onto github
 - [ ] Figure out how to enable automatic builds on Dockerhub triggered by github commits
 - [ ] Get pipeline code in SOS notebook  
